@@ -12,7 +12,6 @@ export interface DashboardState {
 
 export interface HeroesState {
   heroes: Hero[],
-  selectedHero: Hero,
   error: string,
 }
 
@@ -21,6 +20,7 @@ export interface DetailState {
   error: string;
 }
 
+// TODO remove DOCTOR_COLOSSUS once everything is wired up to load the initial state on startup
 export const DOCTOR_COLOSSUS: Hero = {
   id: 42,
   name: 'Doctor Colossus',
@@ -32,7 +32,6 @@ export const INITIAL_STATE: AppState = {
   },
   heroesState: {
     heroes: [DOCTOR_COLOSSUS],
-    selectedHero: DOCTOR_COLOSSUS,
     error: undefined,
   },
   detailState: {
