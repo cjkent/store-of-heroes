@@ -1,25 +1,23 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
 
-import { Hero } from './hero';
-import { HeroService } from './hero.service';
+import {Hero} from './hero';
+import {Observable} from 'rxjs';
+import {AppState} from './state';
+import {Store} from './store';
+import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'my-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit {
-  heroes: Hero[] = [];
+export class DashboardComponent {
 
-  constructor(
-    private router: Router,
-    private heroService: HeroService) {
-  }
+  heroes$: Observable<Hero[]>;
 
-  ngOnInit(): void {
-    this.heroService.getHeroes()
-      .subscribe(heroes => this.heroes = heroes.slice(1, 5));
+  constructor(private router: Router, store: Store<AppState>) {
+    this.heroes$ = store.select(state => state.dashboardState.heroes).pipe(map(heroes => heroes.slice(0, 4)));
   }
 
   gotoDetail(hero: Hero): void {

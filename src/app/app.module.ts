@@ -14,6 +14,8 @@ import { DashboardComponent } from './dashboard.component';
 import { HeroesComponent } from './heroes.component';
 import { HeroDetailComponent } from './hero-detail.component';
 import { HeroSearchComponent } from './hero-search.component';
+import {DebugStore, Store} from './store';
+import {INITIAL_STATE} from './state';
 
 @NgModule({
   imports: [
@@ -34,7 +36,15 @@ import { HeroSearchComponent } from './hero-search.component';
     HeroesComponent,
     HeroDetailComponent,
   ],
-  providers: [HeroService],
+  providers: [
+    HeroService,
+    {provide: Store, useFactory: createStore}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+export function createStore() {
+  return new DebugStore(INITIAL_STATE);
+  // return new Store(INITIAL_STATE);
+}
