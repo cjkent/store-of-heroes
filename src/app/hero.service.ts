@@ -20,9 +20,9 @@ export class HeroService {
     return this.http
       .get<Hero[]>(this.heroesUrl)
       .pipe(
+        tap(heroes => console.info('Heroes loaded', heroes)),
         map(data => data),
         catchError(this.handleError),
-        tap(heroes => console.info('Heroes loaded', heroes)),
         tap(heroes => this.store.dispatch(new HeroesLoaded(heroes))),
       );
   }

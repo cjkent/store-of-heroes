@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {HeroService} from './hero.service';
 
 @Component({
@@ -14,11 +14,13 @@ import {HeroService} from './hero.service';
   `,
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'Tour of Heroes';
 
-  constructor(heroesService: HeroService) {
-    console.info('AppComponent loaded');
-    heroesService.loadHeroes();
+  constructor(private heroesService: HeroService) {}
+
+  ngOnInit(): void {
+    console.info('AppComponent initialising');
+    this.heroesService.loadHeroes();
   }
 }
