@@ -31,7 +31,7 @@ export class HeroesComponent {
   close(savedHero: Hero): void {
     this.addingHero = false;
     if (savedHero) {
-      // this.getHeroes();
+      // this.loadHeroes();
     }
   }
 

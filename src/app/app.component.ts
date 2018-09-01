@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {HeroService} from './hero.service';
 
 @Component({
   selector: 'my-root',
@@ -15,4 +16,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'Tour of Heroes';
+
+  constructor(heroesService: HeroService) {
+    console.info('AppComponent loaded');
+    heroesService.loadHeroes();
+  }
 }

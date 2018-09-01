@@ -1,24 +1,34 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError as observableThrowError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 
 import { Hero } from './hero';
+import { appState, AppState } from './state';
+import { Action, Store } from './store';
 
 @Injectable()
 export class HeroService {
+
   private heroesUrl = 'app/heroes'; // URL to web api
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private store: Store<AppState>) {
+  }
 
-  getHeroes() {
+  loadHeroes(): Observable<Hero[]> {
+    console.info('Loading heroes', this.http);
     return this.http
       .get<Hero[]>(this.heroesUrl)
-      .pipe(map(data => data), catchError(this.handleError));
+      .pipe(
+        map(data => data),
+        catchError(this.handleError),
+        tap(heroes => console.info('Heroes loaded', heroes)),
+        tap(heroes => this.store.dispatch(new HeroesLoaded(heroes))),
+      );
   }
 
   getHero(id: number): Observable<Hero> {
-    return this.getHeroes().pipe(
+    return this.loadHeroes().pipe(
       map(heroes => heroes.find(hero => hero.id === id))
     );
   }
@@ -42,8 +52,8 @@ export class HeroService {
   // Add new Hero
   private post(hero: Hero) {
     const headers = new Headers({
-      'Content-Type': 'application/json'
-    });
+                                  'Content-Type': 'application/json'
+                                });
 
     return this.http
       .post<Hero>(this.heroesUrl, hero)
@@ -63,5 +73,15 @@ export class HeroService {
   private handleError(res: HttpErrorResponse | any) {
     console.error(res.error || res.body.error);
     return observableThrowError(res.error || 'Server error');
+  }
+}
+
+class HeroesLoaded implements Action<AppState> {
+
+  constructor(private heroes: Hero[]) {
+  }
+
+  reduce(state: AppState): AppState {
+    return appState(this.heroes);
   }
 }

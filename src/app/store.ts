@@ -1,5 +1,5 @@
 import {BehaviorSubject, Observable} from 'rxjs';
-import {distinctUntilChanged, map} from 'rxjs/operators';
+import { distinctUntilChanged, first, map } from 'rxjs/operators';
 
 export interface Action<T> {
   reduce(state: T): T;

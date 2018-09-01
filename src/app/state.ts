@@ -39,3 +39,19 @@ export const INITIAL_STATE: AppState = {
     error: undefined,
   }
 };
+
+export function appState(heroes: Hero[]): AppState {
+  return {
+    dashboardState: {
+      heroes: heroes,
+    },
+    heroesState: {
+      heroes: heroes,
+      error: undefined,
+    },
+    detailState: {
+      hero: heroes.length === 0 ? undefined : heroes[0],
+      error: undefined,
+    }
+  };
+}

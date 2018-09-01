@@ -24,6 +24,7 @@ export class HeroDetailComponent implements OnInit {
       if (params['id'] !== undefined) {
         const id = +params['id'];
         this.navigated = true;
+        // TODO this should select from the store. use pipe(first()) to unsubscribe after one value?
         this.heroService.getHero(id).subscribe(hero => (this.hero = hero));
       } else {
         this.navigated = false;
