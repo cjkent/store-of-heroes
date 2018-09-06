@@ -28,7 +28,6 @@ export class HeroDetailComponent implements OnInit {
       if (params['id'] !== undefined) {
         const id = +params['id'];
         this.navigated = true;
-        // TODO this should select from the store. use pipe(first()) to unsubscribe after one value?
         this.store
           .select(state => state.heroesState.heroes)
           .pipe(

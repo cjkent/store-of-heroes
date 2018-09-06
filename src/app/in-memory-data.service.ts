@@ -1,6 +1,5 @@
 export class InMemoryDataService {
   createDb() {
-    console.info('InMemoryDataService.createDb');
     const heroes = [
       { id: 11, name: 'Mr. Nice' },
       { id: 12, name: 'Narco' },

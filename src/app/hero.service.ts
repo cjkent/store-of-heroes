@@ -20,10 +20,10 @@ export class HeroService {
     return this.http
       .get<Hero[]>(this.heroesUrl)
       .pipe(
-        map(data => data),
         catchError(this.handleError),
         first(),
-      ).subscribe(heroes => this.store.dispatch(new HeroesLoaded(heroes)));
+      )
+      .subscribe(heroes => this.store.dispatch(new HeroesLoaded(heroes)));
   }
 
   save(hero: Hero) {

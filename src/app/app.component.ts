@@ -1,9 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {HeroService} from './hero.service';
-import { appState, AppState } from './state';
-import { Action, Store } from './store';
-import { Hero } from './hero';
-import { first } from 'rxjs/operators';
+import { HeroService } from './hero.service';
 
 @Component({
   selector: 'my-root',
@@ -21,10 +17,9 @@ import { first } from 'rxjs/operators';
 export class AppComponent implements OnInit {
   title = 'Tour of Heroes';
 
-  constructor(private heroesService: HeroService, private store: Store<AppState>) {}
+  constructor(private heroesService: HeroService) {}
 
   ngOnInit(): void {
-    console.info('AppComponent initialising');
     this.heroesService.loadHeroes();
   }
 }
