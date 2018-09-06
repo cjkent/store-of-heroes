@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, throwError as observableThrowError } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { throwError as observableThrowError } from 'rxjs';
+import { catchError, first, map } from 'rxjs/operators';
 
 import { Hero } from './hero';
 import { appState, AppState } from './state';
@@ -15,22 +15,15 @@ export class HeroService {
   constructor(private http: HttpClient, private store: Store<AppState>) {
   }
 
-  loadHeroes(): Observable<Hero[]> {
+  loadHeroes() {
     console.info('Loading heroes', this.http);
     return this.http
       .get<Hero[]>(this.heroesUrl)
       .pipe(
-        tap(heroes => console.info('Heroes loaded', heroes)),
         map(data => data),
         catchError(this.handleError),
-        tap(heroes => this.store.dispatch(new HeroesLoaded(heroes))),
-      );
-  }
-
-  getHero(id: number): Observable<Hero> {
-    return this.loadHeroes().pipe(
-      map(heroes => heroes.find(hero => hero.id === id))
-    );
+        first(),
+      ).subscribe(heroes => this.store.dispatch(new HeroesLoaded(heroes)));
   }
 
   save(hero: Hero) {

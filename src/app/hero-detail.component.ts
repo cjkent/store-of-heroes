@@ -2,6 +2,9 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Hero } from './hero';
 import { HeroService } from './hero.service';
+import { AppState } from './state';
+import { Store } from './store';
+import { first, map } from 'rxjs/operators';
 
 @Component({
   selector: 'my-hero-detail',
@@ -16,7 +19,8 @@ export class HeroDetailComponent implements OnInit {
 
   constructor(
     private heroService: HeroService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private store: Store<AppState>
   ) {}
 
   ngOnInit(): void {
@@ -25,7 +29,12 @@ export class HeroDetailComponent implements OnInit {
         const id = +params['id'];
         this.navigated = true;
         // TODO this should select from the store. use pipe(first()) to unsubscribe after one value?
-        this.heroService.getHero(id).subscribe(hero => (this.hero = hero));
+        this.store
+          .select(state => state.heroesState.heroes)
+          .pipe(
+            first(),
+            map(heroes => heroes.find(hero => hero.id === id))
+          ).subscribe(hero => (this.hero = hero));
       } else {
         this.navigated = false;
         this.hero = new Hero();
