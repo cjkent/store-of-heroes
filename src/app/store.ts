@@ -1,5 +1,5 @@
 import {BehaviorSubject, Observable} from 'rxjs';
-import { distinctUntilChanged, first, map } from 'rxjs/operators';
+import {distinctUntilChanged, map} from 'rxjs/operators';
 
 export interface Action<T> {
   reduce(state: T): T;
@@ -18,8 +18,17 @@ export class Store<T> {
     this.emitter.next(this.state);
   }
 
+  apply(actionFn: (state: T) => T) {
+    this.state = actionFn(this.state);
+    this.emitter.next(this.state);
+  }
+
   select<U>(selectorFn: (state: T) => U): Observable<U> {
     return this.emitter.pipe(map(state => selectorFn(state), distinctUntilChanged()));
+  }
+
+  run(task: (state: T) => void) {
+    task(this.state);
   }
 }
 

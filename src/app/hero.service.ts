@@ -44,10 +44,6 @@ export class HeroService {
 
   // Add new Hero
   private post(hero: Hero) {
-    const headers = new Headers({
-                                  'Content-Type': 'application/json'
-                                });
-
     return this.http
       .post<Hero>(this.heroesUrl, hero)
       .pipe(catchError(this.handleError));
